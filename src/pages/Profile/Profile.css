@@ -1,0 +1,66 @@
+/* Profile page - updated with payment fields */
+
+.profile-page { padding: 20px 0 48px; }
+.profile-card {
+  width: 100%;
+  max-width: 920px;
+  margin: 28px auto;
+  background: #fff;
+  border-radius: 12px;
+  padding: 28px;
+  box-shadow: 0 8px 30px rgba(16, 24, 40, 0.06);
+}
+.profile-title { margin: 0 0 6px; font-size: 20px; font-weight: 700; color: #23262f; }
+.profile-sub { margin: 0 0 18px; color: var(--muted); }
+
+.profile-form { display: block; gap: 14px; }
+.row { display: flex; gap: 16px; margin-bottom: 12px; align-items:flex-start; }
+.field { flex: 1; display:flex; flex-direction:column; }
+.field-full { flex: 1 1 100%; }
+.field label { font-weight: 600; color: var(--muted); margin-bottom: 8px; }
+.field input, .field select { padding: 10px 12px; border-radius: 8px; border: 1px solid #eee; background: #fafafa; }
+
+/* Payment specific */
+.section-title { margin-top: 12px; font-size: 15px; font-weight: 700; color: #374151; }
+
+.card-type-select {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background: transparent;
+}
+
+.card-type-select .card-type-icon {
+  width:34px;
+  height:24px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* small SVG adjustments */
+.card-icon { display:block; }
+.card-icon.visa { transform: scale(1); }
+.card-icon.mc { transform: scale(1); }
+.card-icon.amex { transform: scale(1); }
+.card-icon.rupay { transform: scale(1); }
+
+.payment-row .field { min-width: 160px; }
+
+.small-note { font-size: 12px; color: #9aa2b2; margin-top:6px; }
+
+/* form actions */
+.actions { display:flex; gap: 10px; margin-top: 18px; align-items:center; }
+.btn.primary { background: var(--primary); color: #fff; border: 0; padding: 10px 14px; border-radius: 10px; font-weight:700; cursor:pointer; }
+.btn.secondary { background: #f3f4f6; color: #374151; padding: 8px 12px; border-radius: 10px; border: 1px solid #eee; cursor:pointer; }
+
+.field-err { color: crimson; font-weight: 700; margin-top:6px; font-size:13px; }
+
+/* loading state */
+.profile-card.loading { text-align:center; padding: 48px; }
+
+/* responsive */
+@media (max-width: 880px) {
+  .row { flex-direction: column; }
+  .payment-row .field { min-width: auto; }
+}

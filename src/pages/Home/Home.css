@@ -1,0 +1,4 @@
+.home-hero{ padding:64px 0; display:flex; justify-content:center; }
+.hero-card{ width:100%; max-width:900px; background:linear-gradient(180deg,#fff,#fbfbff); border-radius:12px; padding:36px; text-align:center; box-shadow:0 8px 28px rgba(16,24,40,0.06); }
+.hero-card h1{ margin:0 0 10px; font-size:28px; }
+.hero-card p{ color:var(--muted); }

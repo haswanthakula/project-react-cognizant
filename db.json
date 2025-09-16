@@ -1,0 +1,73 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "username": "john",
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "john@example.com",
+      "password": "password123"
+    },
+    {
+      "id": "3107",
+      "username": "haswanth992",
+      "firstName": "Haswanth",
+      "lastName": "Akula",
+      "email": "haswanthakula5@gmail.com",
+      "password": "Haswanth@123",
+      "phone": "7207009566"
+    },
+    {
+      "id": "9b1d",
+      "username": "phani313",
+      "firstName": "phani",
+      "lastName": "akula",
+      "email": "haswanthakula6@gmail.com",
+      "password": "Haswanth@123",
+      "phone": ""
+    },
+    {
+      "id": "4ded",
+      "username": "gaeg537",
+      "firstName": "gaeg",
+      "lastName": "gaew",
+      "email": "gaw@gmail.com",
+      "password": "Haswanth@123",
+      "phone": "3445666787"
+    },
+    {
+      "id": "7971",
+      "username": "ironman",
+      "firstName": "user2",
+      "lastName": "user2last",
+      "email": "user1@gmail.com",
+      "password": "User1@123",
+      "phone": "",
+      "shippingAddress": {
+        "addressLine": "grt",
+        "city": "fag",
+        "postCode": "344556",
+        "country": "ind"
+      },
+      "paymentDetails": null
+    },
+    {
+      "id": "672f",
+      "username": "ironmanf",
+      "firstName": "twa",
+      "lastName": "",
+      "email": "gygeaw@gmail.com",
+      "password": "User1@123",
+      "phone": ""
+    },
+    {
+      "id": "b2f1",
+      "username": "superman",
+      "firstName": "su",
+      "lastName": "gw",
+      "email": "akula@gmail.com",
+      "password": "User1@123",
+      "phone": "43678765"
+    }
+  ]
+}
