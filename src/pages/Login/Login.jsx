@@ -58,13 +58,22 @@ export default function Login() {
       }
 
       const u = data[0];
-      login({ id: u.id, username: u.username, email: u.email });
+      login({ 
+        id: u.id, 
+        username: u.username, 
+        email: u.email,
+        isAdmin: u.isAdmin || false 
+      });
       setNotif({ message: `Welcome back, ${u.username}`, type: 'success', visible: true });
 
       // short pause so user sees the toast then navigate
       setTimeout(() => {
         setNotif(v => ({ ...v, visible: false }));
-        navigate(`/user/${u.username}`);
+        if (u.isAdmin) {
+          navigate('/admin');
+        } else {
+          navigate(`/user/${u.username}`);
+        }
       }, 700);
     } catch (err) {
       console.error(err);

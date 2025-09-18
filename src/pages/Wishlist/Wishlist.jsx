@@ -1,13 +1,54 @@
-import React from 'react';
+// src/pages/Wishlist/Wishlist.jsx
+import React, { useContext } from 'react';
+import { WishlistContext } from '../../context/WishlistContext';
 import './Wishlist.css';
 
-export default function Wishlist(){
+const Wishlist = () => {
+  const { wishlist, removeFromWishlist, addToCart } = useContext(WishlistContext);
+
+  if (wishlist.length === 0) {
+    return (
+      <div className="wishlist-container">
+        <div className="empty-wishlist">
+          <h2>Your wishlist is empty</h2>
+          <p>Add items you love to your wishlist to save them for later</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="container" style={{ paddingTop: 36 }}>
-      <div style={{ maxWidth: 900, margin: '24px auto', background:'#fff', padding:28, borderRadius:12, boxShadow:'0 8px 24px rgba(16,24,40,0.06)' }}>
-        <h2>Your Wishlist</h2>
-        <p>Items you saved will appear here. (Placeholder page)</p>
+    <div className="wishlist-container">
+      <h1>Your Wishlist</h1>
+      <div className="wishlist-items">
+        {wishlist.map((product) => (
+          <div key={product.id} className="wishlist-item">
+            <div className="wishlist-item-image">
+              <img src={product.image} alt={product.title} />
+            </div>
+            <div className="wishlist-item-details">
+              <h3 className="wishlist-item-title">{product.title}</h3>
+              <p className="wishlist-item-price">${product.price.toFixed(2)}</p>
+              <div className="wishlist-item-actions">
+                <button 
+                  className="btn btn-primary" 
+                  onClick={() => addToCart(product)}
+                >
+                  Add to Cart
+                </button>
+                <button 
+                  className="btn btn-outline"
+                  onClick={() => removeFromWishlist(product.id)}
+                >
+                  Remove
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
-}
+};
+
+export default Wishlist;

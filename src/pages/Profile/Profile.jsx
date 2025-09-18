@@ -73,18 +73,30 @@ export default function Profile() {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [addressLine, setAddressLine] = useState('');
-  const [city, setCity] = useState('');
-  const [postCode, setPostCode] = useState('');
-  const [country, setCountry] = useState('');
+
+  // Addresses state
+  const [addresses, setAddresses] = useState([{
+    id: `addr-${Date.now()}`,
+    type: 'home',
+    addressLine: '',
+    city: '',
+    postCode: '',
+    country: '',
+    isDefault: true
+  }]);
 
   // payment state (raw inputs)
-  const [cardType, setCardType] = useState('Visa');
-  const [cardName, setCardName] = useState('');
-  const [cardNumber, setCardNumber] = useState('');
-  const [expiry, setExpiry] = useState(''); // MM/YY
-  const [cvv, setCvv] = useState('');
+  const [paymentMethods, setPaymentMethods] = useState([{
+    id: `pm-${Date.now()}`,
+    cardType: 'Visa',
+    cardName: '',
+    cardNumber: '',
+    expiry: '',
+    cvv: '',
+    isDefault: true
+  }]);
 
+  const [activeTab, setActiveTab] = useState('profile');
   const [userId, setUserId] = useState(null);
 
   useEffect(() => {
@@ -120,26 +132,117 @@ export default function Profile() {
     setFirstName(data.firstName ?? '');
     setLastName(data.lastName ?? '');
     setEmail(data.email ?? '');
-    setAddressLine((data.shippingAddress && data.shippingAddress.addressLine) || '');
-    setCity((data.shippingAddress && data.shippingAddress.city) || '');
-    setPostCode((data.shippingAddress && data.shippingAddress.postCode) || '');
-    setCountry((data.shippingAddress && data.shippingAddress.country) || '');
-
-    // paymentDetails example: { cardType, cardName, cardMasked, cardLast4, expiry }
-    if (data.paymentDetails) {
-      const pd = data.paymentDetails;
-      setCardType(pd.cardType ?? 'Visa');
-      setCardName(pd.cardName ?? '');
-      setCardNumber(pd.cardMasked ? pd.cardMasked.replace(/\*/g, '') : ''); // masked to empty
-      setExpiry(pd.expiry ?? '');
-      // we never load CVV (not saved)
+    
+    // Set addresses from data or default empty address
+    if (data.addresses && data.addresses.length > 0) {
+      setAddresses(data.addresses);
     } else {
-      setCardType('Visa');
-      setCardName('');
-      setCardNumber('');
-      setExpiry('');
+      // If no addresses, create a default one
+      setAddresses([{
+        id: `addr-${Date.now()}`,
+        type: 'home',
+        addressLine: '',
+        city: '',
+        postCode: '',
+        country: '',
+        isDefault: true
+      }]);
+    }
+
+    // Set payment methods from data or default empty payment method
+    if (data.paymentMethods && data.paymentMethods.length > 0) {
+      setPaymentMethods(data.paymentMethods);
+    } else {
+      setPaymentMethods([{
+        id: `pm-${Date.now()}`,
+        cardType: 'Visa',
+        cardName: '',
+        cardNumber: '',
+        expiry: '',
+        cvv: '',
+        isDefault: true
+      }]);
     }
   }
+
+  // Add new address
+  const addNewAddress = () => {
+    setAddresses([...addresses, {
+      id: `addr-${Date.now()}`,
+      type: 'home',
+      addressLine: '',
+      city: '',
+      postCode: '',
+      country: '',
+      isDefault: addresses.length === 0 // Set as default if it's the first address
+    }]);
+  };
+
+  // Remove address
+  const removeAddress = (id) => {
+    const newAddresses = addresses.filter(addr => addr.id !== id);
+    // If we removed the default and there are other addresses, set the first one as default
+    if (newAddresses.length > 0 && !newAddresses.some(a => a.isDefault)) {
+      newAddresses[0].isDefault = true;
+    }
+    setAddresses(newAddresses);
+  };
+
+  // Update address
+  const updateAddress = (id, field, value) => {
+    setAddresses(addresses.map(addr => {
+      if (addr.id === id) {
+        return { ...addr, [field]: value };
+      }
+      return addr;
+    }));
+  };
+
+  // Set default address
+  const setDefaultAddress = (id) => {
+    setAddresses(addresses.map(addr => ({
+      ...addr,
+      isDefault: addr.id === id
+    })));
+  };
+
+  // Similar functions for payment methods
+  const addNewPaymentMethod = () => {
+    setPaymentMethods([...paymentMethods, {
+      id: `pm-${Date.now()}`,
+      cardType: 'Visa',
+      cardName: '',
+      cardNumber: '',
+      expiry: '',
+      cvv: '',
+      isDefault: paymentMethods.length === 0 // Set as default if it's the first payment method
+    }]);
+  };
+
+  const removePaymentMethod = (id) => {
+    const newPaymentMethods = paymentMethods.filter(pm => pm.id !== id);
+    // If we removed the default and there are other payment methods, set the first one as default
+    if (newPaymentMethods.length > 0 && !newPaymentMethods.some(pm => pm.isDefault)) {
+      newPaymentMethods[0].isDefault = true;
+    }
+    setPaymentMethods(newPaymentMethods);
+  };
+
+  const updatePaymentMethod = (id, field, value) => {
+    setPaymentMethods(paymentMethods.map(pm => {
+      if (pm.id === id) {
+        return { ...pm, [field]: value };
+      }
+      return pm;
+    }));
+  };
+
+  const setDefaultPaymentMethod = (id) => {
+    setPaymentMethods(paymentMethods.map(pm => ({
+      ...pm,
+      isDefault: pm.id === id
+    })));
+  };
 
   function validate() {
     const e = {};
@@ -150,35 +253,42 @@ export default function Profile() {
     // password optional
     if (password && password.length < 6) e.password = 'Password must be at least 6 characters';
 
-    // if user filled any card field, require the full set
-    const anyPayment = cardName.trim() || cardNumber.trim() || expiry.trim() || cvv.trim();
-    if (anyPayment) {
-      if (!cardName.trim()) e.cardName = 'Cardholder name required';
-      if (!cardNumber.trim()) e.cardNumber = 'Card number required';
+    // Addresses validation
+    addresses.forEach((addr, index) => {
+      if (!addr.addressLine.trim()) e[`addressLine${index}`] = 'Address line is required';
+      if (!addr.city.trim()) e[`city${index}`] = 'City is required';
+      if (!addr.postCode.trim()) e[`postCode${index}`] = 'Post code is required';
+      if (!addr.country.trim()) e[`country${index}`] = 'Country is required';
+    });
+
+    // Payment methods validation
+    paymentMethods.forEach((pm, index) => {
+      if (!pm.cardName.trim()) e[`cardName${index}`] = 'Cardholder name is required';
+      if (!pm.cardNumber.trim()) e[`cardNumber${index}`] = 'Card number is required';
       else {
-        const digits = (cardNumber.match(/\d/g) || []).join('');
-        const expected = CARD_INFO[cardType]?.cardDigits ?? 16;
-        if (digits.length !== expected) e.cardNumber = `Card number must be ${expected} digits for ${cardType}`;
+        const digits = (pm.cardNumber.match(/\d/g) || []).join('');
+        const expected = CARD_INFO[pm.cardType]?.cardDigits ?? 16;
+        if (digits.length !== expected) e[`cardNumber${index}`] = `Card number must be ${expected} digits for ${pm.cardType}`;
       }
-      if (!expiry.trim()) e.expiry = 'Expiry required (MM/YY)';
+      if (!pm.expiry.trim()) e[`expiry${index}`] = 'Expiry required (MM/YY)';
       else {
         // basic check
-        if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(expiry.trim())) e.expiry = 'Expiry must be MM/YY';
+        if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(pm.expiry.trim())) e[`expiry${index}`] = 'Expiry must be MM/YY';
         else {
           // simple not-expired check
-          const [m, y] = expiry.split('/');
+          const [m, y] = pm.expiry.split('/');
           const exp = new Date(2000 + Number(y), Number(m) - 1, 1);
           const now = new Date();
           exp.setMonth(exp.getMonth() + 1); // end of expiry month
-          if (exp <= now) e.expiry = 'Card looks expired';
+          if (exp <= now) e[`expiry${index}`] = 'Card looks expired';
         }
       }
-      if (!cvv.trim()) e.cvv = 'CVV required';
+      if (!pm.cvv.trim()) e[`cvv${index}`] = 'CVV required';
       else {
-        const expectedCvv = CARD_INFO[cardType]?.cvvLength ?? 3;
-        if (!/^\d+$/.test(cvv) || cvv.length !== expectedCvv) e.cvv = `CVV must be ${expectedCvv} digits`;
+        const expectedCvv = CARD_INFO[pm.cardType]?.cvvLength ?? 3;
+        if (!/^\d+$/.test(pm.cvv) || pm.cvv.length !== expectedCvv) e[`cvv${index}`] = `CVV must be ${expectedCvv} digits`;
       }
-    }
+    });
 
     return e;
   }
@@ -219,32 +329,11 @@ export default function Profile() {
         firstName: firstName.trim(),
         lastName: lastName.trim(),
         email: email.trim().toLowerCase(),
-        shippingAddress: {
-          addressLine: addressLine.trim(),
-          city: city.trim(),
-          postCode: postCode.trim(),
-          country: country.trim()
-        }
+        addresses,
+        paymentMethods
       };
 
       if (password) payload.password = password;
-
-      // payment details — only store masked number and last4, do NOT store CVV
-      const anyPayment = cardName.trim() || cardNumber.trim() || expiry.trim();
-      if (anyPayment) {
-        const digits = (cardNumber.match(/\d/g) || []).join('');
-        const last4 = digits.slice(-4);
-        payload.paymentDetails = {
-          cardType,
-          cardName: cardName.trim(),
-          cardMasked: maskCardNumber(digits),
-          cardLast4: last4,
-          expiry: expiry.trim()
-        };
-      } else {
-        // if user cleared payment fields, remove paymentDetails
-        payload.paymentDetails = null;
-      }
 
       const res = await fetch(`${API}/users/${userId}`, {
         method: 'PATCH',
@@ -265,7 +354,6 @@ export default function Profile() {
       setNotif({ message: 'Profile updated', type: 'success', visible: true });
       setTimeout(() => setNotif(v => ({ ...v, visible: false })), 1000);
       setPassword('');
-      setCvv('');
     } catch (err) {
       console.error(err);
       setNotif({ message: 'Update failed. Try again.', type: 'error', visible: true });
@@ -315,71 +403,94 @@ export default function Profile() {
             </div>
           </div>
 
-          <h3 className="section-title">Shipping Address</h3>
-          <div className="row">
-            <div className="field field-full">
-              <label>Address Line</label>
-              <input value={addressLine} onChange={e => setAddressLine(e.target.value)} />
-            </div>
-          </div>
-          <div className="row">
-            <div className="field">
-              <label>City</label>
-              <input value={city} onChange={e => setCity(e.target.value)} />
-            </div>
-            <div className="field">
-              <label>Post Code</label>
-              <input value={postCode} onChange={e => setPostCode(e.target.value)} />
-            </div>
-            <div className="field">
-              <label>Country</label>
-              <input value={country} onChange={e => setCountry(e.target.value)} />
-            </div>
-          </div>
-
-          <h3 className="section-title">Payment Details</h3>
-
-          <div className="row payment-row">
-            <div className="field card-type-field">
-              <label>Card Type</label>
-              <div className="card-type-select">
-                <div className="card-type-icon">{IconForCard(cardType)}</div>
-                <select value={cardType} onChange={e => setCardType(e.target.value)}>
-                  <option value="Visa">Visa</option>
-                  <option value="MasterCard">MasterCard</option>
-                  <option value="Rupay">Rupay</option>
-                  <option value="American Express">American Express</option>
-                </select>
+          <h3 className="section-title">Addresses</h3>
+          {addresses.map((addr, index) => (
+            <div key={addr.id} className="address-card">
+              <h4 className="address-title">{addr.type}</h4>
+              <div className="row">
+                <div className="field">
+                  <label>Address Line</label>
+                  <input value={addr.addressLine} onChange={e => updateAddress(addr.id, 'addressLine', e.target.value)} />
+                  {errors[`addressLine${index}`] && <div className="field-err">{errors[`addressLine${index}`]}</div>}
+                </div>
+              </div>
+              <div className="row">
+                <div className="field">
+                  <label>City</label>
+                  <input value={addr.city} onChange={e => updateAddress(addr.id, 'city', e.target.value)} />
+                  {errors[`city${index}`] && <div className="field-err">{errors[`city${index}`]}</div>}
+                </div>
+                <div className="field">
+                  <label>Post Code</label>
+                  <input value={addr.postCode} onChange={e => updateAddress(addr.id, 'postCode', e.target.value)} />
+                  {errors[`postCode${index}`] && <div className="field-err">{errors[`postCode${index}`]}</div>}
+                </div>
+                <div className="field">
+                  <label>Country</label>
+                  <input value={addr.country} onChange={e => updateAddress(addr.id, 'country', e.target.value)} />
+                  {errors[`country${index}`] && <div className="field-err">{errors[`country${index}`]}</div>}
+                </div>
+              </div>
+              <div className="actions">
+                <button type="button" className="btn secondary" onClick={() => removeAddress(addr.id)}>Remove</button>
+                <button type="button" className="btn secondary" onClick={() => setDefaultAddress(addr.id)}>Set as default</button>
               </div>
             </div>
+          ))}
+          <button type="button" className="btn primary" onClick={addNewAddress}>Add new address</button>
 
-            <div className="field">
-              <label>Cardholder Name</label>
-              <input value={cardName} onChange={e => setCardName(e.target.value)} placeholder="Name on card" />
-              {errors.cardName && <div className="field-err">{errors.cardName}</div>}
-            </div>
-          </div>
+          <h3 className="section-title">Payment Methods</h3>
+          {paymentMethods.map((pm, index) => (
+            <div key={pm.id} className="payment-method-card">
+              <h4 className="payment-method-title">{pm.cardType}</h4>
+              <div className="row payment-row">
+                <div className="field card-type-field">
+                  <label>Card Type</label>
+                  <div className="card-type-select">
+                    <div className="card-type-icon">{IconForCard(pm.cardType)}</div>
+                    <select value={pm.cardType} onChange={e => updatePaymentMethod(pm.id, 'cardType', e.target.value)}>
+                      <option value="Visa">Visa</option>
+                      <option value="MasterCard">MasterCard</option>
+                      <option value="Rupay">Rupay</option>
+                      <option value="American Express">American Express</option>
+                    </select>
+                  </div>
+                </div>
 
-          <div className="row">
-            <div className="field">
-              <label>Card Number</label>
-              <input value={cardNumber} onChange={e => setCardNumber(e.target.value)} placeholder={cardType === 'American Express' ? '15 digits' : '16 digits'} inputMode="numeric" />
-              {errors.cardNumber && <div className="field-err">{errors.cardNumber}</div>}
-            </div>
+                <div className="field">
+                  <label>Cardholder Name</label>
+                  <input value={pm.cardName} onChange={e => updatePaymentMethod(pm.id, 'cardName', e.target.value)} placeholder="Name on card" />
+                  {errors[`cardName${index}`] && <div className="field-err">{errors[`cardName${index}`]}</div>}
+                </div>
+              </div>
 
-            <div className="field">
-              <label>Expiry (MM/YY)</label>
-              <input value={expiry} onChange={e => setExpiry(e.target.value)} placeholder="MM/YY" />
-              {errors.expiry && <div className="field-err">{errors.expiry}</div>}
-            </div>
+              <div className="row">
+                <div className="field">
+                  <label>Card Number</label>
+                  <input value={pm.cardNumber} onChange={e => updatePaymentMethod(pm.id, 'cardNumber', e.target.value)} placeholder={pm.cardType === 'American Express' ? '15 digits' : '16 digits'} inputMode="numeric" />
+                  {errors[`cardNumber${index}`] && <div className="field-err">{errors[`cardNumber${index}`]}</div>}
+                </div>
 
-            <div className="field">
-              <label>CVV</label>
-              <input type="password" value={cvv} onChange={e => setCvv(e.target.value)} placeholder={CARD_INFO[cardType].cvvLength === 4 ? '4 digits' : '3 digits'} inputMode="numeric" />
-              {errors.cvv && <div className="field-err">{errors.cvv}</div>}
-              <div className="small-note">CVV is not stored.</div>
+                <div className="field">
+                  <label>Expiry (MM/YY)</label>
+                  <input value={pm.expiry} onChange={e => updatePaymentMethod(pm.id, 'expiry', e.target.value)} placeholder="MM/YY" />
+                  {errors[`expiry${index}`] && <div className="field-err">{errors[`expiry${index}`]}</div>}
+                </div>
+
+                <div className="field">
+                  <label>CVV</label>
+                  <input type="password" value={pm.cvv} onChange={e => updatePaymentMethod(pm.id, 'cvv', e.target.value)} placeholder={CARD_INFO[pm.cardType].cvvLength === 4 ? '4 digits' : '3 digits'} inputMode="numeric" />
+                  {errors[`cvv${index}`] && <div className="field-err">{errors[`cvv${index}`]}</div>}
+                  <div className="small-note">CVV is not stored.</div>
+                </div>
+              </div>
+              <div className="actions">
+                <button type="button" className="btn secondary" onClick={() => removePaymentMethod(pm.id)}>Remove</button>
+                <button type="button" className="btn secondary" onClick={() => setDefaultPaymentMethod(pm.id)}>Set as default</button>
+              </div>
             </div>
-          </div>
+          ))}
+          <button type="button" className="btn primary" onClick={addNewPaymentMethod}>Add new payment method</button>
 
           <div className="actions">
             <button type="submit" className="btn primary">Save Changes</button>

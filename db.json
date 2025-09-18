@@ -1,12 +1,36 @@
 {
   "users": [
     {
+      "id": "admin",
+      "username": "admin",
+      "firstName": "Admin",
+      "lastName": "User",
+      "email": "admin@example.com",
+      "password": "admin@123",
+      "isAdmin": true,
+      "phone": ""
+    },
+    {
       "id": "1",
       "username": "john",
       "firstName": "John",
       "lastName": "Doe",
       "email": "john@example.com",
-      "password": "password123"
+      "password": "password123",
+      "isAdmin": false,
+      "phone": "",
+      "addresses": [
+        {
+          "id": "addr1",
+          "type": "home",
+          "addressLine": "123 Main St",
+          "city": "New York",
+          "postCode": "10001",
+          "country": "USA",
+          "isDefault": true
+        }
+      ],
+      "paymentMethods": []
     },
     {
       "id": "3107",
@@ -15,7 +39,10 @@
       "lastName": "Akula",
       "email": "haswanthakula5@gmail.com",
       "password": "Haswanth@123",
-      "phone": "7207009566"
+      "isAdmin": false,
+      "phone": "7207009566",
+      "addresses": [],
+      "paymentMethods": []
     },
     {
       "id": "9b1d",
@@ -24,7 +51,10 @@
       "lastName": "akula",
       "email": "haswanthakula6@gmail.com",
       "password": "Haswanth@123",
-      "phone": ""
+      "isAdmin": false,
+      "phone": "",
+      "addresses": [],
+      "paymentMethods": []
     },
     {
       "id": "4ded",
@@ -33,7 +63,10 @@
       "lastName": "gaew",
       "email": "gaw@gmail.com",
       "password": "Haswanth@123",
-      "phone": "3445666787"
+      "isAdmin": false,
+      "phone": "3445666787",
+      "addresses": [],
+      "paymentMethods": []
     },
     {
       "id": "7971",
@@ -42,14 +75,20 @@
       "lastName": "user2last",
       "email": "user1@gmail.com",
       "password": "User1@123",
+      "isAdmin": false,
       "phone": "",
-      "shippingAddress": {
-        "addressLine": "grt",
-        "city": "fag",
-        "postCode": "344556",
-        "country": "ind"
-      },
-      "paymentDetails": null
+      "addresses": [
+        {
+          "id": "addr1",
+          "type": "home",
+          "addressLine": "grt",
+          "city": "fag",
+          "postCode": "344556",
+          "country": "ind",
+          "isDefault": true
+        }
+      ],
+      "paymentMethods": []
     },
     {
       "id": "672f",
@@ -58,7 +97,10 @@
       "lastName": "",
       "email": "gygeaw@gmail.com",
       "password": "User1@123",
-      "phone": ""
+      "isAdmin": false,
+      "phone": "",
+      "addresses": [],
+      "paymentMethods": []
     },
     {
       "id": "b2f1",
@@ -67,7 +109,10 @@
       "lastName": "gw",
       "email": "akula@gmail.com",
       "password": "User1@123",
-      "phone": "43678765"
+      "isAdmin": false,
+      "phone": "43678765",
+      "addresses": [],
+      "paymentMethods": []
     }
   ]
 }
