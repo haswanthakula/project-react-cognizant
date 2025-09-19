@@ -1,0 +1,28 @@
+{
+  "products": [
+    {
+      "id": "p1",
+      "name": "Heirloom tomato",
+      "price": 5.99,
+      "unit": "lb",
+      "image": "https://images.unsplash.com/photo-1502741338009-cac2772e18bc",
+      "description": "Fresh heirloom tomatoes, perfect for salads."
+    },
+    {
+      "id": "p2",
+      "name": "Organic ginger",
+      "price": 12.99,
+      "unit": "lb",
+      "image": "https://images.unsplash.com/photo-1519864600265-abb23847ef2c",
+      "description": "Organic ginger root, great for cooking and tea."
+    },
+    {
+      "id": "p3",
+      "name": "Sweet onion",
+      "price": 2.99,
+      "unit": "lb",
+      "image": "https://images.unsplash.com/photo-1465101046530-73398c7f28ca",
+      "description": "Sweet onions, ideal for grilling and salads."
+    }
+  ]
+}

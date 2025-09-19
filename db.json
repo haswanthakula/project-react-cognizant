@@ -8,7 +8,10 @@
       "email": "admin@example.com",
       "password": "admin@123",
       "isAdmin": true,
-      "phone": ""
+      "phone": "",
+      "cart": [],
+      "wishlist": [],
+      "orders": []
     },
     {
       "id": "1",
@@ -30,89 +33,98 @@
           "isDefault": true
         }
       ],
-      "paymentMethods": []
+      "paymentMethods": [],
+      "cart": [
+        {
+          "id": "p1",
+          "name": "Heirloom tomato",
+          "price": 5.99,
+          "unit": "lb",
+          "image": "https://images.unsplash.com/photo-1502741338009-cac2772e18bc",
+          "description": "Fresh heirloom tomatoes, perfect for salads.",
+          "quantity": 1
+        },
+        {
+          "id": "p2",
+          "name": "Organic ginger",
+          "price": 12.99,
+          "unit": "lb",
+          "image": "https://images.unsplash.com/photo-1519864600265-abb23847ef2c",
+          "description": "Organic ginger root, great for cooking and tea.",
+          "quantity": 1
+        },
+        {
+          "id": "p3",
+          "name": "Sweet onion",
+          "price": 2.99,
+          "unit": "lb",
+          "image": "https://images.unsplash.com/photo-1465101046530-73398c7f28ca",
+          "description": "Sweet onions, ideal for grilling and salads.",
+          "quantity": 1
+        }
+      ],
+      "wishlist": [
+        {
+          "id": "p2",
+          "name": "Organic ginger",
+          "price": 12.99,
+          "unit": "lb",
+          "image": "https://images.unsplash.com/photo-1519864600265-abb23847ef2c",
+          "description": "Organic ginger root, great for cooking and tea."
+        },
+        {
+          "id": "p3",
+          "name": "Sweet onion",
+          "price": 2.99,
+          "unit": "lb",
+          "image": "https://images.unsplash.com/photo-1465101046530-73398c7f28ca",
+          "description": "Sweet onions, ideal for grilling and salads."
+        }
+      ],
+      "orders": []
     },
     {
-      "id": "3107",
-      "username": "haswanth992",
-      "firstName": "Haswanth",
-      "lastName": "Akula",
-      "email": "haswanthakula5@gmail.com",
+      "id": "6c94",
+      "username": "haswanth",
+      "firstName": "haswanth1",
+      "lastName": "akula1",
+      "email": "haswa@gmail.com",
       "password": "Haswanth@123",
-      "isAdmin": false,
-      "phone": "7207009566",
-      "addresses": [],
-      "paymentMethods": []
-    },
-    {
-      "id": "9b1d",
-      "username": "phani313",
-      "firstName": "phani",
-      "lastName": "akula",
-      "email": "haswanthakula6@gmail.com",
-      "password": "Haswanth@123",
-      "isAdmin": false,
-      "phone": "",
-      "addresses": [],
-      "paymentMethods": []
-    },
-    {
-      "id": "4ded",
-      "username": "gaeg537",
-      "firstName": "gaeg",
-      "lastName": "gaew",
-      "email": "gaw@gmail.com",
-      "password": "Haswanth@123",
-      "isAdmin": false,
-      "phone": "3445666787",
-      "addresses": [],
-      "paymentMethods": []
-    },
-    {
-      "id": "7971",
-      "username": "ironman",
-      "firstName": "user2",
-      "lastName": "user2last",
-      "email": "user1@gmail.com",
-      "password": "User1@123",
-      "isAdmin": false,
-      "phone": "",
+      "phone": "1234567890",
       "addresses": [
         {
-          "id": "addr1",
+          "id": "addr-1758171789063",
           "type": "home",
-          "addressLine": "grt",
-          "city": "fag",
-          "postCode": "344556",
-          "country": "ind",
+          "addressLine": "bojjavaaari",
+          "city": "kakinada",
+          "postCode": "533450",
+          "country": "India",
+          "isDefault": false
+        },
+        {
+          "id": "addr-1758171914430",
+          "type": "home",
+          "addressLine": "cACJ",
+          "city": "VSADV",
+          "postCode": "453Y34",
+          "country": "VSAv",
           "isDefault": true
         }
       ],
-      "paymentMethods": []
-    },
-    {
-      "id": "672f",
-      "username": "ironmanf",
-      "firstName": "twa",
-      "lastName": "",
-      "email": "gygeaw@gmail.com",
-      "password": "User1@123",
-      "isAdmin": false,
-      "phone": "",
-      "addresses": [],
-      "paymentMethods": []
-    },
-    {
-      "id": "b2f1",
-      "username": "superman",
-      "firstName": "su",
-      "lastName": "gw",
-      "email": "akula@gmail.com",
-      "password": "User1@123",
-      "isAdmin": false,
-      "phone": "43678765",
-      "addresses": [],
-      "paymentMethods": []
+      "paymentMethods": [
+        {
+          "id": "pm-1758171789063",
+          "cardType": "Visa",
+          "cardName": "haswanth",
+          "cardNumber": "1234567890123456",
+          "expiry": "08/56",
+          "cvv": "234",
+          "isDefault": true
+        }
+      ],
+      "cart": [],
+      "wishlist": [],
+      "orders": []
     }
   ]
 }

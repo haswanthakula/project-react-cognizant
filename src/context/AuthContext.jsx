@@ -19,9 +19,20 @@ export function AuthProvider({ children }) {
 
   const login = (userData) => setUser(userData);
   const logout = () => setUser(null);
+  const loginWithBackend = (username, password) => {
+    fetch(`http://localhost:3001/users?username=${username}&password=${password}`)
+      .then(res => res.json())
+      .then(users => {
+        if (users.length > 0) {
+          setUser(users[0]); // Set latest user data from backend
+        } else {
+          setUser(null); // Invalid login
+        }
+      });
+  };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, loginWithBackend }}>
       {children}
     </AuthContext.Provider>
   );

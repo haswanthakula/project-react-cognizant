@@ -74,7 +74,7 @@ export default function Header() {
         <nav className="center-nav">
           <Link to="/deals" className="nav-link">Deals of the Day</Link>
           <Link to="/new" className="nav-link">New Arrivals</Link>
-          <Link to="/shop" className="nav-link">Shop</Link>
+          <Link to="/products" className="nav-link">Shop</Link>
         </nav>
 
         <div className="right" ref={containerRef}>

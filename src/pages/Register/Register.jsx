@@ -130,6 +130,9 @@ export default function Register(){
 
             <div style={{textAlign:'center', marginTop:18}}>
               <button className="btn primary" type="submit">Register</button>
+              <button className="btn" type="button" style={{marginLeft: '1rem'}} onClick={() => navigate('/login')}>
+                Login
+              </button>
             </div>
           </form>
         </div>

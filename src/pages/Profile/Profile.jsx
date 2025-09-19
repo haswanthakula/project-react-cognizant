@@ -73,6 +73,7 @@ export default function Profile() {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [phone, setPhone] = useState('');
 
   // Addresses state
   const [addresses, setAddresses] = useState([{
@@ -132,7 +133,8 @@ export default function Profile() {
     setFirstName(data.firstName ?? '');
     setLastName(data.lastName ?? '');
     setEmail(data.email ?? '');
-    
+    setPhone(data.phone ?? '');
+
     // Set addresses from data or default empty address
     if (data.addresses && data.addresses.length > 0) {
       setAddresses(data.addresses);
@@ -249,6 +251,7 @@ export default function Profile() {
     if (!firstName.trim()) e.firstName = 'First name is required';
     if (!email.trim()) e.email = 'Email is required';
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) e.email = 'Invalid email';
+    if (phone && !/^\d{10,}$/.test(phone.trim())) e.phone = 'Phone must be at least 10 digits';
 
     // password optional
     if (password && password.length < 6) e.password = 'Password must be at least 6 characters';
@@ -329,6 +332,7 @@ export default function Profile() {
         firstName: firstName.trim(),
         lastName: lastName.trim(),
         email: email.trim().toLowerCase(),
+        phone: phone.trim(),
         addresses,
         paymentMethods
       };
@@ -395,7 +399,11 @@ export default function Profile() {
               <input value={email} onChange={e => setEmail(e.target.value)} />
               {errors.email && <div className="field-err">{errors.email}</div>}
             </div>
-
+            <div className="field">
+              <label>Phone</label>
+              <input value={phone} onChange={e => setPhone(e.target.value)} placeholder="Phone number" />
+              {errors.phone && <div className="field-err">{errors.phone}</div>}
+            </div>
             <div className="field">
               <label>New Password (optional)</label>
               <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Leave blank to keep current password" />

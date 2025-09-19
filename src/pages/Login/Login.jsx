@@ -13,7 +13,7 @@ export default function Login() {
   const [errors, setErrors] = useState({});
   const [notif, setNotif] = useState({ message: '', type: 'info', visible: false });
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { loginWithBackend } = useAuth();
 
   function isEmail(value) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
@@ -58,12 +58,7 @@ export default function Login() {
       }
 
       const u = data[0];
-      login({ 
-        id: u.id, 
-        username: u.username, 
-        email: u.email,
-        isAdmin: u.isAdmin || false 
-      });
+      await loginWithBackend(u.username, u.password); // Use backend login for latest user data
       setNotif({ message: `Welcome back, ${u.username}`, type: 'success', visible: true });
 
       // short pause so user sees the toast then navigate
